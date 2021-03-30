@@ -27,16 +27,20 @@ import sys
 import os
 
 # Third party imports
-
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
 
 # Local application imports
-from src.main.python.edu.tec.ic6400.view.window import show_window
 
 
-def main():
+def show_window():
+    app = QApplication(sys.argv)
+    q_main_window = QWidget()
+    q_main_window.setGeometry(200, 200, 600, 300)
+    q_main_window.setWindowTitle("Simplex Method")
+    q_main_window.move(200, 200)
+    message = QLabel('<h1>Simplex Method Calculator</h1>', parent=q_main_window)
+    message.move(60, 15)
 
-    print("LOADING...")
-    show_window()
-
-
-main()
+    q_main_window.show()
+    sys.exit(app.exec_())
