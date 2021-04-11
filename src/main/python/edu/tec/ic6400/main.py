@@ -27,29 +27,29 @@ import sys
 import os
 
 # Third party imports
-
+from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 
 # Local application imports
-from src.main.python.edu.tec.ic6400.view.window import show_window
-
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIntValidator
-from PyQt5.QtWidgets import QApplication, QMainWindow, QComboBox, QPushButton
-import sys
-
-def window():
-    app=QApplication(sys.argv)
-    win=QMainWindow()
-    win.setGeometry(1000,200,600,700)
-    win.setWindowTitle("Calculadora Simplex")
+from src.main.python.edu.tec.ic6400.view.simplex_program_gui import MainSimplexWindow
 
 
-    label_method = QtWidgets.QLabel(win)
+def main():
+
+    # Create the entire GUI program
+    simplex_app = QApplication(sys.argv)
+    simplex_app_window = QMainWindow()
+    simplex_app_window.setGeometry(1000, 200, 600, 700)
+    simplex_app_window.setWindowTitle("Calculadora Simplex")
+
+    label_method = QtWidgets.QLabel(simplex_app_window)
     label_method.setText('Método: ')
     label_method.setFont(QtGui.QFont("Arial", 14, QtGui.QFont.Bold))
     label_method.move(100, 40)
 
-    methods_combo = QComboBox(win)
+    methods_combo = QComboBox(simplex_app_window)
     methods_combo.addItem("Seleccione un método..")
     methods_combo.addItem("Gran M")
     methods_combo.addItem("2 Fases")
@@ -57,37 +57,35 @@ def window():
     methods_combo.setGeometry(200, 150, 200, 50)
     methods_combo.move(200, 25)
 
-    label_n_variables = QtWidgets.QLabel(win)
+    label_n_variables = QtWidgets.QLabel(simplex_app_window)
     label_n_variables.setText('Número de variables: ')
     label_n_variables.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Bold))
     label_n_variables.move(10, 55)
     label_n_variables.setGeometry(100, 85, 200, 50)
 
-    text_n_variables=QtWidgets.QLineEdit(win)
+    text_n_variables = QtWidgets.QLineEdit(simplex_app_window)
     text_n_variables.move(300, 90)
     text_n_variables.resize(65, 35)
     only_int = QIntValidator()
     text_n_variables.setValidator(only_int)
 
-    label_n_constraints = QtWidgets.QLabel(win)
+    label_n_constraints = QtWidgets.QLabel(simplex_app_window)
     label_n_constraints.setText('Número de restricciones: ')
     label_n_constraints.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Bold))
     label_n_constraints.setGeometry(100, 130, 200, 50)
 
-    text_n_constraints = QtWidgets.QLineEdit(win)
+    text_n_constraints = QtWidgets.QLineEdit(simplex_app_window)
     text_n_constraints.move(300, 135)
     text_n_constraints.resize(65, 35)
     only_int = QIntValidator()
     text_n_constraints.setValidator(only_int)
 
-    button_gen_model = QPushButton(win)
+    button_gen_model = QPushButton(simplex_app_window)
     button_gen_model.setText("Generar modelo")
     button_gen_model.setGeometry(285, 185, 150, 35)
 
+    simplex_app_window.show()
+    sys.exit(simplex_app.exec_())
 
 
-
-    win.show()
-    sys.exit(app.exec_())
-
-window()
+main()
