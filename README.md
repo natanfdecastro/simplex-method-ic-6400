@@ -9,8 +9,6 @@ Implementation of the Simplex Method algorithm to solve linear programming maxim
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
-
 ### Prerequisites
 
 * `pip3` installed, the package installer for Python. Installation:
