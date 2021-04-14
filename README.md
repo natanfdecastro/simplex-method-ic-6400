@@ -1,4 +1,52 @@
 # simplex-method-ic-6400
 
-## Description
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
 Implementation of the Simplex Method algorithm to solve linear programming maximization and minimization problems. 
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
+
+### Prerequisites
+
+* `pip3` installed, the package installer for Python. Installation:
+```
+sudo apt-get -y install python3-pip
+```
+* `PyQt5 5.15.4` installed, set of cross-platform C++ libraries that implement high-level APIs for accessing many aspects of modern desktop and mobile systems. Installation:
+```
+pip3 install PyQt5
+```
+* `qt-material 2.8.4` installed, stylesheet for PySide6, PySide2 and PyQt5, which looks like Material Design. Installation:
+```
+pip3 install qt-material
+```
+
+### Installation and Usage
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/natanfdecastro/simplex-method-ic-6400
+   ```
+2. Go to `src/main/python/edu/tec/ic6400/` and run:
+   ```sh
+   python3 simplex-program.py
+   ```
+
+<!-- LICENSE -->
+## License
+
+Distributed under the  GPL-3.0 License. See `LICENSE` for more information.
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Natán Fernández de Castro - [@natanfdecastro](https://twitter.com/natanfdecastro) - natanfdecastro@protonmail.com
+
+Project Link: [https://github.com/natanfdecastro/simplex-method-ic-6400](https://github.com/natanfdecastro/simplex-method-ic-6400)
