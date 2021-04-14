@@ -29,9 +29,14 @@ Copyright (C) 2021 Natan & Diego & Adriel
 # Local application imports
 
 
-def two_phases_method():
+def two_phases_method(max_min_operation_to_use, txt_generation_is_checked):
 
-    print("Two Phases Method")
+    if txt_generation_is_checked:
+        print("Two Phases Method with txt generation")
+    else:
+        print("Two Phases Method with no txt generation")
 
-
-two_phases_method()
+    if max_min_operation_to_use == "maximize":
+        print("Two Phases Method with maximization")
+    else:
+        print("Two Phases Method with minization")

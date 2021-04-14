@@ -33,7 +33,9 @@ class Widget(QtWidgets.QWidget):
         print(*[item.text() for item in self.items[:self.spinBox.value()]], sep="\n")
 
     def set_item_count(self, new_count: int):
+
         n_items = len(self.items)
+
         for ii in range(n_items, new_count):
             item = self.lineEdit(self)
             self.items.append(item)
