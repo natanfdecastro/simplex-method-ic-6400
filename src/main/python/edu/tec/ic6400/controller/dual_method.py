@@ -29,9 +29,14 @@ Copyright (C) 2021 Natan & Diego & Adriel
 # Local application imports
 
 
-def dual_method():
+def dual_method(max_min_operation_to_use, txt_generation_is_checked):
 
-    print("Dual Method")
+    if txt_generation_is_checked:
+        print("Dual Method with txt generation")
+    else:
+        print("Dual Method with no txt generation")
 
-
-dual_method()
+    if max_min_operation_to_use == "maximize":
+        print("Dual Method with maximization")
+    else:
+        print("Dual Method with minization")

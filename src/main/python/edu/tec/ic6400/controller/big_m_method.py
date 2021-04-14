@@ -29,9 +29,13 @@ Copyright (C) 2021 Natan & Diego & Adriel
 # Local application imports
 
 
-def big_m_method():
+def big_m_method(max_min_operation_to_use, txt_generation_is_checked):
+    if txt_generation_is_checked:
+        print("Big M Method with txt generation")
+    else:
+        print("Big M Method with no txt generation")
 
-    print("Big M Method")
-
-
-big_m_method()
+    if max_min_operation_to_use == "maximize":
+        print("Big M Method with maximization")
+    else:
+        print("Big M Method with minization")

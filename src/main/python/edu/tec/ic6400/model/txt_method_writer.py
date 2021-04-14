@@ -33,6 +33,3 @@ Copyright (C) 2021 Natan & Diego & Adriel
 def txt_method_writer():
 
     print("txt_method_writer")
-
-
-txt_method_writer()
