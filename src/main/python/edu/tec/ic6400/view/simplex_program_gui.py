@@ -29,6 +29,7 @@ import sympy
 import numpy as np # cambiar nombre de referencia
 
 # Third party imports
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
 from PyQt5.uic.Compiler.qtproxies import QtWidgets, QtGui
@@ -78,7 +79,8 @@ class SimplexProgramGui(QMainWindow):
     def set_simplex_main_window(self):
 
         self.objective_function_label = QLabel("Objective function", self)
-        self.objective_function_label.setFixedHeight(self.objective_function_label.sizeHint().height())
+        self.objective_function_label.setFont(QFont('Consolas', 16))
+        # self.objective_function_label.setFixedHeight(self.objective_function_label.sizeHint().height())
         # El tercer parámetro pasarlo como un QLabel no con un arreglo de ComboBox
         self.objective_fxn_table = self.create_table(1, 4, ["="], self.create_header_labels(2))
 
@@ -91,12 +93,14 @@ class SimplexProgramGui(QMainWindow):
         self.objective_fxn_table.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.objective_fxn_table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         #
-        self.objective_fxn_table.resizeColumnsToContents()
+        # self.objective_fxn_table.resizeColumnsToContents()
         # Buscar docu
         self.objective_fxn_table.setFixedHeight(
-            self.objective_fxn_table.verticalHeader().length() + self.objective_fxn_table.horizontalHeader().height())
+            self.objective_fxn_table.verticalHeader().length() +
+            self.objective_fxn_table.horizontalHeader().height() + 13)
 
-        self.constraints_label = QLabel("Constraints Matrix", self)
+        self.constraints_label = QLabel("Constraints", self)
+        self.constraints_label.setFont(QFont('Consolas', 16))
         self.constraints_label.setFixedHeight(self.constraints_label.sizeHint().height())
         self.constraint_table = self.create_table(2, 4, self.CONSTRAINT_EQUALITY_SIGNS, self.create_header_labels(2))
         self.constraint_table.setFixedHeight(self.constraint_table.sizeHint().height())
@@ -199,12 +203,9 @@ class SimplexProgramGui(QMainWindow):
                     equality_signs_combo.addItem(item)
                 table.setCellWidget(index, numofcols - 2, equality_signs_combo)
 
-        #for j in range(table.columnCount()):
-            #table.item(rows, j).setBackground("white")
-
         # Do the resize of the columns by content
-        table.resizeColumnsToContents()
-        table.resizeRowsToContents()
+        #table.resizeColumnsToContents()
+        #table.resizeRowsToContents()
 
         return table
 
@@ -313,7 +314,7 @@ if __name__ == "__main__":
 
     simplex_app = QApplication(sys.argv)
     simplex_main_window = SimplexProgramGui()
-    # apply_stylesheet(simplex_app, theme='dark_cyan.xml')
+    apply_stylesheet(simplex_app, theme='dark_cyan.xml')
     simplex_main_window.show()
     sys.exit(simplex_app.exec())
 
