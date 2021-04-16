@@ -24,21 +24,16 @@ Copyright (C) 2021 Natan & Diego & Adriel
 
 # Standard library imports
 import sys
-import os
 import sympy
-import numpy as np # cambiar nombre de referencia
+import numpy as np  # cambiar nombre de referencia
 
 # Third party imports
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
-from PyQt5.uic.Compiler.qtproxies import QtWidgets, QtGui
 from PyQt5.QtWidgets import (
     QApplication,
     QComboBox,
-    QFormLayout,
-    QLineEdit,
-    QStackedLayout,
     QVBoxLayout,
     QWidget,
 )
@@ -48,11 +43,12 @@ from qt_material import apply_stylesheet
 from src.main.python.edu.tec.ic6400.controller.big_m_method import *
 from src.main.python.edu.tec.ic6400.controller.dual_method import *
 from src.main.python.edu.tec.ic6400.controller.two_phases_method import *
-from src.main.python.edu.tec.ic6400.model.txt_method_writer import *
+
+# from src.main.python.edu.tec.ic6400.model.txt_method_writer import *
 
 # Global Variables, constants and macros
 GREATER_EQUAL_SIGN = u"\u2264"  # code for <=
-LESS_EQUAL_SIGN = u"\u2265"   # code for >=
+LESS_EQUAL_SIGN = u"\u2265"  # code for >=
 EQUAL_SIGN = "="  # char for =
 HEADER_SPACE = 11
 
@@ -73,11 +69,7 @@ class SimplexProgramGui(QMainWindow):
         self.column_items_count = 2
         self.row_items_count = 2
 
-        self.set_simplex_main_window()
-        self.set_ui_layout()
-
-    def set_simplex_main_window(self):
-
+        #
         self.objective_function_label = QLabel("Objective function", self)
         self.objective_function_label.setFont(QFont('Consolas', 16))
         # self.objective_function_label.setFixedHeight(self.objective_function_label.sizeHint().height())
@@ -121,7 +113,6 @@ class SimplexProgramGui(QMainWindow):
 
         self.solve_btn = QPushButton('Solve', self)
 
-
         self.method_combo_box = QComboBox()
         for item in ["Big M Method", "Dual Method", "Two Phases Method"]:
             self.method_combo_box.addItem(item)
@@ -134,7 +125,8 @@ class SimplexProgramGui(QMainWindow):
 
         self.solve_btn.clicked.connect(self.solve_method)
 
-    def set_ui_layout(self):
+        # Set the layout (draw it)
+
         vbox_layout1 = QHBoxLayout(self)
         self.vbox_layout2 = QVBoxLayout(self)
 
@@ -203,13 +195,10 @@ class SimplexProgramGui(QMainWindow):
                     equality_signs_combo.addItem(item)
                 table.setCellWidget(index, numofcols - 2, equality_signs_combo)
 
-        # Do the resize of the columns by content
-        #table.resizeColumnsToContents()
-        #table.resizeRowsToContents()
-
         return table
 
-    def create_header_labels(self, num_of_variables):
+    @staticmethod
+    def create_header_labels(num_of_variables):
         """Name the columns for the tables x1,x2,.... give a space and then add bi"""
         header_labels = [" " * HEADER_SPACE + "x" + str(i + 1) + " " * HEADER_SPACE for i in range(num_of_variables)]
         header_labels.extend([" " * HEADER_SPACE, " " * HEADER_SPACE + "LD" + " " * HEADER_SPACE])
@@ -254,21 +243,45 @@ class SimplexProgramGui(QMainWindow):
         method_to_solve = self.method_combo_box.currentText().lower()
         max_min_operation_to_use = self.max_min_combo_box.currentText().lower()
 
+        # Get the data entered in tables from the main simplex window
+        objective_function = self.get_obj_fxn()
+        restriction_matrix = self.form_unaugmented_matrix()
+        restriction_signs = self.read_equality_signs(self.constraint_table.columnCount() - 2,
+                                                     self.constraint_table)
+
+        # Check the method entered to solve and call the respective module
         if method_to_solve == "big m method":
             if self.txt_generation_check_box.isChecked():
                 big_m_method(max_min_operation_to_use, True)
             else:
                 big_m_method(max_min_operation_to_use, False)
         elif method_to_solve == "dual method":
+
             if self.txt_generation_check_box.isChecked():
-                dual_method(max_min_operation_to_use, True)
+                dual_method(max_min_operation_to_use, True, objective_function, restriction_matrix, restriction_signs)
             else:
-                dual_method(max_min_operation_to_use, False)
+                dual_method(max_min_operation_to_use, False, objective_function, restriction_matrix, restriction_signs)
         else:
             if self.txt_generation_check_box.isChecked():
                 two_phases_method(max_min_operation_to_use, True)
             else:
                 two_phases_method(max_min_operation_to_use, False)
+
+    @staticmethod
+    def read_table_items(table, start_row, end_row, start_col, end_col):
+        read_table = np.zeros((end_row - start_row, end_col - start_col), dtype=sympy.Symbol)
+        for i in range(start_row, end_row):
+            for j in range(start_col, end_col):
+                read_table[i - end_row][j - end_col] = float(table.item(i, j).text())
+
+        return read_table
+
+    @staticmethod
+    def read_equality_signs(equality_signs_column, table):
+        equality_signs = []
+        for i in range(table.rowCount()):
+            equality_signs.append(table.cellWidget(i, equality_signs_column).currentText())
+        return equality_signs
 
     def form_unaugmented_matrix(self):
         obj_fxn = self.get_obj_fxn()
@@ -282,26 +295,6 @@ class SimplexProgramGui(QMainWindow):
         unaugmented_matrix = np.vstack((obj_fxn, unaugmented_matrix_without_obj_fxn))
         return unaugmented_matrix
 
-    def read_table_items(self, table, start_row, end_row, start_col, end_col):
-        read_table = np.zeros((end_row - start_row, end_col - start_col), dtype=sympy.Symbol)
-        for i in range(start_row, end_row):
-            for j in range(start_col, end_col):
-                read_table[i - end_row][j - end_col] = float(table.item(i, j).text())
-
-        return read_table
-
-    def read_equality_signs(self, equality_signs_column, table):
-        equality_signs = []
-        for i in range(table.rowCount()):
-            equality_signs.append(table.cellWidget(i, equality_signs_column).currentText())
-        return equality_signs
-
-    def populatetable(self, table, mylist, start_row, end_row, start_col, end_col):
-        for i in range(start_row, end_row):
-            for j in range(start_col, end_col):
-                table.setItem(i, j, QTableWidgetItem(str(mylist[i - end_row][j - end_col])))
-        table.resizeColumnsToContents()
-
     def get_obj_fxn(self):
         obj_fxn_coeff = self.read_table_items(self.objective_fxn_table, 0, self.objective_fxn_table.rowCount(), 0,
                                               self.objective_fxn_table.columnCount() - 2)
@@ -310,12 +303,8 @@ class SimplexProgramGui(QMainWindow):
 
 
 if __name__ == "__main__":
-    import sys
-
     simplex_app = QApplication(sys.argv)
     simplex_main_window = SimplexProgramGui()
     apply_stylesheet(simplex_app, theme='dark_cyan.xml')
     simplex_main_window.show()
     sys.exit(simplex_app.exec())
-
-
