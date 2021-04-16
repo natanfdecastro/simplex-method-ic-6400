@@ -23,13 +23,26 @@ Copyright (C) 2021 Natan & Diego & Adriel
 """
 
 # Standard library imports
+import math
 
 # Third party imports
 
 # Local application imports
 
 
-def dual_method(max_min_operation_to_use, txt_generation_is_checked):
+def dual_method(max_min_operation_to_use, txt_generation_is_checked, objective_function,
+                restriction_matrix, restriction_signs):
+
+    # Round the numbers to float in the objective function
+    objective_function = [math.floor(number) for number in objective_function]
+
+    # Round the numbers to float in the whole table
+    for i in range(len(restriction_matrix)):
+        restriction_matrix[i] = [math.floor(number) for number in restriction_matrix[i]]
+
+    print(objective_function)
+    print(restriction_matrix)
+    print(restriction_signs)
 
     if txt_generation_is_checked:
         print("Dual Method with txt generation")
