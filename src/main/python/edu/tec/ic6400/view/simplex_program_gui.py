@@ -44,7 +44,6 @@ from src.main.python.edu.tec.ic6400.controller.big_m_method import *
 from src.main.python.edu.tec.ic6400.controller.dual_method import *
 from src.main.python.edu.tec.ic6400.controller.two_phases_method import *
 
-# from src.main.python.edu.tec.ic6400.model.txt_method_writer import *
 
 # Global Variables, constants and macros
 GREATER_EQUAL_SIGN = u"\u2264"  # code for <=
@@ -77,16 +76,14 @@ class SimplexProgramGui(QMainWindow):
         self.objective_fxn_table = self.create_table(1, 4, ["="], self.create_header_labels(2))
 
         # Buscar que la entrada sea siempre Uppercase
-        z_item = QTableWidgetItem("U")
-        self.objective_fxn_table.setItem(0, 3, z_item)
+        self.z_item = QTableWidgetItem("U")
+        self.objective_fxn_table.setItem(0, 3, self.z_item)
 
         # make the objective fxn table's size fit perfectly with the rows
-        # Buscar en docu
         self.objective_fxn_table.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.objective_fxn_table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        #
-        # self.objective_fxn_table.resizeColumnsToContents()
-        # Buscar docu
+
+
         self.objective_fxn_table.setFixedHeight(
             self.objective_fxn_table.verticalHeader().length() +
             self.objective_fxn_table.horizontalHeader().height() + 13)
@@ -97,8 +94,6 @@ class SimplexProgramGui(QMainWindow):
         self.constraint_table = self.create_table(2, 4, self.CONSTRAINT_EQUALITY_SIGNS, self.create_header_labels(2))
         self.constraint_table.setFixedHeight(self.constraint_table.sizeHint().height())
 
-        # self.objective_fxn_table.setRowHeight(0, 11)  # Set the height of the fourth row of the table
-        # texto para solución
         self.answers_label = QLabel()
 
         self.variables_number_label = QLabel('Number of Variables: ', self)
@@ -251,10 +246,51 @@ class SimplexProgramGui(QMainWindow):
 
         # Check the method entered to solve and call the respective module
         if method_to_solve == "big m method":
-            if self.txt_generation_check_box.isChecked():
-                big_m_method(max_min_operation_to_use, True)
+            variable=(self.z_item.text())
+            self.answers_label.setText("")
+            data = self.form_unaugmented_matrix()
+            restriction_matrix = self.read_table_items(self.constraint_table, 0, self.constraint_table.rowCount(), 0,
+                                                       self.constraint_table.columnCount() - 2)
+            objective_values = []
+            equals_values = []
+            equality_signs = self.read_equality_signs(self.constraint_table.columnCount() - 2, self.constraint_table)
+            conversion = []
+            for i in range(len(data)):
+                for j in range(len(data[i])):
+                    if i == 0:
+                        if j == 0:
+                            pass
+                        else:
+                            objective_values.append(data[i][j])
+
+            for i in range(len(data)):
+                for j in range(len(data[i])):
+                    if i == 0:
+                        pass
+                    else:
+                        if j == 0:
+                            equals_values.append(data[i][j])
+                        else:
+                            pass
+            for i in range(len(equality_signs)):
+                if equality_signs[i] == '≤':
+                    conversion.append(-1)
+                elif equality_signs[i] == '≥':
+                    conversion.append(1)
+                else:
+                    conversion.append(0)
+            max_or_min = ""
+            if max_min_operation_to_use == "maximize":
+                max_or_min = "max"
             else:
-                big_m_method(max_min_operation_to_use, False)
+                max_or_min = "min"
+            if self.txt_generation_check_box.isChecked():
+                list_restriction_matrix = restriction_matrix.tolist()
+
+                self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, conversion, max_or_min,True,variable))
+            else:
+                list_restriction_matrix = restriction_matrix.tolist()
+                self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, conversion,max_or_min,False,variable))
         elif method_to_solve == "dual method":
 
             if self.txt_generation_check_box.isChecked():

@@ -1,0 +1,12 @@
+max 2.0x1 + 3.0x2
+ sujeto a:
+  3.0x1 + 2.0x2 ≥ 4.0 
+  2.0x1 + x2 ≥ 5.0 
+  x1,x2 ≥ 0
+
+ Error : El problema no esta acotado.
+      Crece indefinidamente en la direccion de la variable s2.
+       x1     x2     s1     a1     s2     a2     
+x2    2.0    1.0    0.0    0.0   -1.0    1.0    5.0
+s1    1.0    0.0    1.0   -1.0   -2.0    2.0    6.0
+z    -4.0    0.0    0.0 -100.0    3.0 -103.0  -15.0

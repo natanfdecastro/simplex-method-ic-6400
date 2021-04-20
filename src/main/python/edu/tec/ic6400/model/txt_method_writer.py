@@ -33,3 +33,22 @@ Copyright (C) 2021 Natan & Diego & Adriel
 def txt_method_writer():
 
     print("txt_method_writer")
+
+
+#function that writes to the text file.
+def writer_big_m_method(flag,text):
+    if flag:
+        f = open(
+        "/home/adriel/Escritorio/simplex-method-ic-6400/src/resources/txt_solutions/big_m_method/solucion_temporal.txt",
+        "w")
+        f.close()
+    elif flag==False and text == 2:
+        f = open(
+            "/home/adriel/Escritorio/simplex-method-ic-6400/src/resources/txt_solutions/big_m_method/solucion_temporal.txt",
+            "a")
+        f.close()
+    else:
+        f = open(
+            "/home/adriel/Escritorio/simplex-method-ic-6400/src/resources/txt_solutions/big_m_method/solucion_temporal.txt",
+            "a")
+        f.writelines(text)
