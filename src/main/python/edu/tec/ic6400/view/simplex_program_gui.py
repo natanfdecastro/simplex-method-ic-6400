@@ -113,7 +113,7 @@ class SimplexProgramGui(QMainWindow):
             self.method_combo_box.addItem(item)
 
         self.max_min_combo_box = QComboBox()
-        for item in ["Maximize", "Minimize"]:
+        for item in ["max", "min"]:
             self.max_min_combo_box.addItem(item)
 
         self.txt_generation_check_box = QCheckBox("Generate .txt solution file")
@@ -246,16 +246,15 @@ class SimplexProgramGui(QMainWindow):
 
         # Check the method entered to solve and call the respective module
         if method_to_solve == "big m method":
-            variable=(self.z_item.text())
+            variable_objetive_function=(self.z_item.text())
             self.answers_label.setText("")
-            print(self.answers_label.text(),"este es el print")
             data = self.form_unaugmented_matrix()
             restriction_matrix = self.read_table_items(self.constraint_table, 0, self.constraint_table.rowCount(), 0,
                                                        self.constraint_table.columnCount() - 2)
+            #These variables have the data that the algorithm needs to work
             objective_values = []
             equals_values = []
-            equality_signs = self.read_equality_signs(self.constraint_table.columnCount() - 2, self.constraint_table)
-            conversion = []
+            signs_conversion= []
             for i in range(len(data)):
                 for j in range(len(data[i])):
                     if i == 0:
@@ -264,33 +263,37 @@ class SimplexProgramGui(QMainWindow):
                         else:
                             objective_values.append(data[i][j])
 
+            """
+            Get the values that are after the equal sign
+            For example I get the number 4: 2x1+3x2=[4]
+            """
             for i in range(len(data)):
                 for j in range(len(data[i])):
-                    if i == 0:
-                        pass
-                    else:
+                    if i != 0:
                         if j == 0:
                             equals_values.append(data[i][j])
                         else:
                             pass
-            for i in range(len(equality_signs)):
-                if equality_signs[i] == '≤':
-                    conversion.append(-1)
-                elif equality_signs[i] == '≥':
-                    conversion.append(1)
+            """
+            <= -> -1
+            >= -> 1
+            = -> 0
+            This conversion is done because the algorithm reads the signs in this way and not as a string.
+            """
+            for i in range(len(restriction_signs)):
+                if restriction_signs[i] == '≤':
+                    signs_conversion.append(-1)
+                elif restriction_signs[i] == '≥':
+                    signs_conversion.append(1)
                 else:
-                    conversion.append(0)
-            max_or_min = ""
-            if max_min_operation_to_use == "maximize":
-                max_or_min = "max"
-            else:
-                max_or_min = "min"
+                    signs_conversion.append(0)
+
             if self.txt_generation_check_box.isChecked():
                 list_restriction_matrix = restriction_matrix.tolist()
-                self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, conversion, max_or_min,True,variable))
+                self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, signs_conversion, max_min_operation_to_use,True,variable_objetive_function))
             else:
                 list_restriction_matrix = restriction_matrix.tolist()
-                self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, conversion,max_or_min,False,variable))
+                self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, signs_conversion,max_min_operation_to_use,False,variable_objetive_function))
         elif method_to_solve == "dual method":
 
             if self.txt_generation_check_box.isChecked():

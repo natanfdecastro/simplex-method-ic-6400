@@ -23,7 +23,7 @@ Copyright (C) 2021 Natan & Diego & Adriel
 """
 
 # Standard library imports
-
+import math, copy
 # Third party imports
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import *
@@ -34,25 +34,26 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-import math, copy
+
 # Local application imports
 from src.main.python.edu.tec.ic6400.view.simplex_program_gui import *
 from src.main.python.edu.tec.ic6400.model.txt_method_writer import *
 
 
-
-error=""
-variable=""
+#stores the error message
+error = ""
+#stores the character of the variable
+variable = ""
 def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
     global error
-    error=""
-    print(constraints,equals,objective,symbol,operation,flag,var)
+    error = ""
     writer_big_m_method(True, "")
     global variable
-    variable=var
+    #Update the variable from the objective function
+    variable = var
     writer_big_m_method(True, "")
-    M = 100
-    (matrix, variables, basic, pos) = table(constraints, equals, objective, symbol, operation, M)  # M al final
+    M_value = 100
+    (matrix, variables, basic, pos) = table(constraints, equals, objective, symbol, operation, M_value)  # M al final
     matrix_with_pivot_base = pivot_base(matrix, pos)
     if flag:
         print_problem(constraints, equals, objective, symbol, operation)
@@ -79,7 +80,7 @@ def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
                 writer_big_m_method(False, "\n Step: " + str(k + 1) + ": pivot found in index=" + str(index))
                 writer_big_m_method(False,2)
                 print_table(matrix_with_pivot_base, basic, variables)
-    if check_error(matrix_with_pivot_base, M, variables,flag) == "":
+    if check_error(matrix_with_pivot_base, M_value, variables,flag) == "":
         if flag:
             writer_big_m_method(False,"\n Solution:")
             writer_big_m_method(False,2)
@@ -99,6 +100,7 @@ def print_problem(constraints, equals, objective, ine, prob):
     copy_constraints = copy.deepcopy(constraints)
     copy_equals = copy.deepcopy(equals)
     copy_objective = copy.deepcopy(objective)
+    #variables that store the length of the list
     n = len(objective)
     m = len(equals)
     # Objective Function
@@ -170,17 +172,18 @@ def check_error(matrix_with_pivot_base, M, var,flag):
     global error
     n = len(matrix_with_pivot_base[0]) - 1
     m = len(matrix_with_pivot_base) - 1
-    funb = 0
-    finf = 0
+    #flags indicating the type of error
+    flag_not_limited_error = 0
+    flag_infeasible_error = 0
     for j in range(n):
         #  checked only between slack variables
         if var[j][0:1] == 's' and matrix_with_pivot_base[m][j] > 0:
             var_error = (var[j][0:2])
-            funb = 1
+            flag_not_limited_error = 1
         elif var[j][0:1] == 's' and matrix_with_pivot_base[m][j] <= -M:
             var_error = (var[j][0:2])
-            finf = 1
-    if funb:
+            flag_infeasible_error = 1
+    if flag_infeasible_error:
         error=("\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable: " + var_error + ".")
         if flag:
             """
@@ -188,7 +191,7 @@ def check_error(matrix_with_pivot_base, M, var,flag):
             "\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable" + var_error + ".")
             """
             writer_big_m_method(False, "\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable" + var_error + ".")
-    if finf:
+    if flag_not_limited_error:
         error=('\n Error: The iterations have completed and there are artificial variables in the base with values strictly greater than 0,\n '
             'so the problem has no solution (infeasible).')
         if flag:
@@ -216,7 +219,7 @@ def table(constraints, equals, objective, symbol, operation, M):
     # list of variables
     variables = []
     base = []
-    posbase = []
+    pos_base = []
     len_objetive = len(copy_objective)
     len_constraints = len(copy_constraints)
 
@@ -229,54 +232,53 @@ def table(constraints, equals, objective, symbol, operation, M):
     copy_constraints.append(c)  # add at the end
     copy_equals.append(0)
     zero = [0.0] * len(copy_equals)
-    naux = 0
-    nslack = 0  # slack variables
+    n_aux = 0
+    n_slack = 0  # slack variables
 
     # table construction
     for i in range(0, len(copy_symbol)):
         copy_constraints = append_col(copy_constraints, zero)
         if copy_symbol[i] == 1:
-            copy_constraints[i][len_objetive + nslack + naux] = -1
-            variables.append(f"s{nslack + 1}")
-            nslack += 1
+            copy_constraints[i][len_objetive + n_slack + n_aux] = -1
+            variables.append(f"s{n_slack + 1}")
+            n_slack += 1
             # bigM aux
             copy_constraints = append_col(copy_constraints, zero)
-            copy_constraints[i][len_objetive + nslack + naux] = 1
-            variables.append(f"a{naux + 1}")
-            base.append(f"a{naux + 1}")
-            copy_constraints[len_constraints][len_objetive + nslack + naux] = -M
-            naux += 1
+            copy_constraints[i][len_objetive + n_slack + n_aux] = 1
+            variables.append(f"a{n_aux + 1}")
+            base.append(f"a{n_aux + 1}")
+            copy_constraints[len_constraints][len_objetive + n_slack + n_aux] = -M
+            n_aux += 1
         elif copy_symbol[i] == 0:
-            copy_constraints[i][len_objetive + nslack + naux] = 1
-            variables.append(f"a{naux + 1}")
-            base.append(f"a{naux + 1}")
-            copy_constraints[len_constraints][len_objetive + nslack + naux] = -M
-            naux += 1
+            copy_constraints[i][len_objetive + n_slack + n_aux] = 1
+            variables.append(f"a{n_aux + 1}")
+            base.append(f"a{n_aux + 1}")
+            copy_constraints[len_constraints][len_objetive + n_slack + n_aux] = -M
+            n_aux += 1
         elif copy_symbol[i] == -1:
-            variables.append(f"s{nslack + 1}")
-            base.append(f"s{nslack + 1}")
-            copy_constraints[i][len_objetive + nslack + naux] = 1
-            nslack += 1
-        posbase.append(len_objetive + nslack + naux)
-    return (append_col(copy_constraints, copy_equals), variables, base, posbase)
+            variables.append(f"s{n_slack + 1}")
+            base.append(f"s{n_slack + 1}")
+            copy_constraints[i][len_objetive + n_slack + n_aux] = 1
+            n_slack += 1
+        pos_base.append(len_objetive + n_slack + n_aux)
+    return (append_col(copy_constraints, copy_equals), variables, base, pos_base)
 
 
-def pivot(A, pivot_index):  # pivota un index+1 en una matriz A
+def pivot(vector_pivot, pivot_index):
     # Perform operations on pivot.
-
-    T = copy.deepcopy(A)
+    vector = copy.deepcopy(vector_pivot)
     i, j = pivot_index[0] - 1, pivot_index[1] - 1
-    pivot = T[i][j]
-    T[i] = [element / pivot for
-            element in T[i]]
-    for index, row in enumerate(T):
+    pivot = vector[i][j]
+    vector[i] = [element / pivot for
+            element in vector[i]]
+    for index, row in enumerate(vector):
         if index != i:
-            row_scale = [y * T[index][j]
-                         for y in T[i]]
-            T[index] = [x - y for x, y in
-                        zip(T[index],
+            row_scale = [y * vector[index][j]
+                         for y in vector[i]]
+            vector[index] = [x - y for x, y in
+                        zip(vector[index],
                             row_scale)]
-    return T
+    return vector
 
 
 #    consecutive pivots based on column vector
@@ -291,16 +293,16 @@ def pivot_base(matrix, pos):
 # simplex column evaluation returns indexj
 def pivot_j_index(last_position_matrix_pivot, vari):
     copy_last_position_matrix_pivot = copy.deepcopy(last_position_matrix_pivot)
-    vmax = -1
-    jmax = -2
+    v_max = -1
+    j_max = -2
     for j in range(0, len(copy_last_position_matrix_pivot) - 1):
         temp = copy_last_position_matrix_pivot[j]
         if vari[j][0:1] != 'x':
             temp = temp - 0.00009
-        if temp > 0 and temp > vmax:
-            vmax = copy_last_position_matrix_pivot[j]
-            jmax = j
-    return jmax
+        if temp > 0 and temp > v_max:
+            v_max = copy_last_position_matrix_pivot[j]
+            j_max = j
+    return j_max
 
 
 # simplex row evaluation returns indexi
@@ -324,17 +326,17 @@ def pivote_i_index(vector_2, vector_1, basi):
 # get the pivot position in the matrix
 def index_pivot(matrix_pivot, basi, vari):
     copy_matrix_pivot = copy.deepcopy(matrix_pivot)
-    indexj = pivot_j_index(copy_matrix_pivot[len(copy_matrix_pivot) - 1], vari) + 1
+    index_j = pivot_j_index(copy_matrix_pivot[len(copy_matrix_pivot) - 1], vari) + 1
     vector_1 = v_col(copy_matrix_pivot, len(copy_matrix_pivot[0]))
-    vector_2 = v_col(copy_matrix_pivot, indexj)
-    indexi = pivote_i_index(vector_2, vector_1, basi) + 1
-    return [indexi, indexj]
+    vector_2 = v_col(copy_matrix_pivot, index_j)
+    index_i = pivote_i_index(vector_2, vector_1, basi) + 1
+    return [index_i, index_j]
 
 
 # auxiliary tools
 
 # add the vector (column) to matrix List
-def append_col(list, vector):  # añade el vector vc (columna) a matriz T
+def append_col(list, vector):
     copy_list = copy.deepcopy(list)
     copy_vector = copy.deepcopy(vector)
     for i in range(0, len(copy_list)):
@@ -352,7 +354,7 @@ def v_col(matrix, column):
 
 
 # Print the table to the text file
-def print_table(matrix, basic, variables):  # Muestra tableu
+def print_table(matrix, basic, variables):
     global variable
     copy_matrix = copy.deepcopy(matrix)
     copy_variables = copy.deepcopy(variables)
@@ -362,10 +364,7 @@ def print_table(matrix, basic, variables):  # Muestra tableu
     writer_big_m_method(False,'\n       ')
 
     for i in copy_variables:
-        writer_big_m_method(False,
-                            '{0:7}'.format(i)
-                            )
-
+        writer_big_m_method(False,'{0:7}'.format(i))
     writer_big_m_method(False,'\n')
     for k in range(0, len(copy_matrix)):
         writer_big_m_method(False, copy_basic[k])
