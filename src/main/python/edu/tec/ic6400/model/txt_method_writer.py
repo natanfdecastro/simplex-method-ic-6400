@@ -42,13 +42,13 @@ def writer_big_m_method(flag,text):
     #open the text file
     if flag:
 
-        f = open(path,"w")
-        f.close()
+        file = open(path,"w")
+        file.close()
     #Close the text file
     elif flag==False and text == 2:
-        f = open(path,"a")
-        f.close()
+        file = open(path,"a")
+        file.close()
     #write to text file
     else:
-        f = open(path,"a")
-        f.writelines(text)
+        file = open(path,"a")
+        file.writelines(text)
