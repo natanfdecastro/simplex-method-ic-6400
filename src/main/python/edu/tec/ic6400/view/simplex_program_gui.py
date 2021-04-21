@@ -243,35 +243,39 @@ class SimplexProgramGui(QMainWindow):
         restriction_matrix = self.form_unaugmented_matrix()
         restriction_signs = self.read_equality_signs(self.constraint_table.columnCount() - 2,
                                                      self.constraint_table)
+        #gets all the constraints of the matrix
+        constraints_matrix = self.read_table_items(self.constraint_table, 0, self.constraint_table.rowCount(), 0,
+                                                   self.constraint_table.columnCount() - 2)
+        #obtains the variable of the objective function (Z,U,W...)
+        variable_objetive_function = (self.z_item.text())
 
         # Check the method entered to solve and call the respective module
         if method_to_solve == "big m method":
-            variable_objetive_function=(self.z_item.text())
+
             self.answers_label.setText("")
-            data = self.form_unaugmented_matrix()
-            restriction_matrix = self.read_table_items(self.constraint_table, 0, self.constraint_table.rowCount(), 0,
-                                                       self.constraint_table.columnCount() - 2)
             #These variables have the data that the algorithm needs to work
             objective_values = []
             equals_values = []
             signs_conversion= []
-            for i in range(len(data)):
-                for j in range(len(data[i])):
+            """
+            Obtains the values of the objective function omitting the 0 at
+            the beginning of the vector
+            """
+            for i in range(len(restriction_matrix)):
+                for j in range(len(restriction_matrix[i])):
                     if i == 0:
-                        if j == 0:
-                            pass
-                        else:
-                            objective_values.append(data[i][j])
+                        if j != 0:
+                            objective_values.append(restriction_matrix[i][j])
 
             """
             Get the values that are after the equal sign
             For example I get the number 4: 2x1+3x2=[4]
             """
-            for i in range(len(data)):
-                for j in range(len(data[i])):
+            for i in range(len(restriction_matrix)):
+                for j in range(len(restriction_matrix[i])):
                     if i != 0:
                         if j == 0:
-                            equals_values.append(data[i][j])
+                            equals_values.append(restriction_matrix[i][j])
                         else:
                             pass
             """
@@ -289,10 +293,10 @@ class SimplexProgramGui(QMainWindow):
                     signs_conversion.append(0)
 
             if self.txt_generation_check_box.isChecked():
-                list_restriction_matrix = restriction_matrix.tolist()
+                list_restriction_matrix = constraints_matrix.tolist()
                 self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, signs_conversion, max_min_operation_to_use,True,variable_objetive_function))
             else:
-                list_restriction_matrix = restriction_matrix.tolist()
+                list_restriction_matrix = constraints_matrix.tolist()
                 self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, signs_conversion,max_min_operation_to_use,False,variable_objetive_function))
         elif method_to_solve == "dual method":
 

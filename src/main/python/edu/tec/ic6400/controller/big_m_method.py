@@ -61,7 +61,7 @@ def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
         writer_big_m_method(False,2)
         print_table(matrix, basic, variables)
     if flag:
-        writer_big_m_method(False,"\nTabla con variables M")
+        writer_big_m_method(False,"\nTable with M variables")
         writer_big_m_method(False, 2)
         print_table(matrix_with_pivot_base, basic, variables)
         writer_big_m_method(False, "\nBasic variables =")
@@ -394,8 +394,8 @@ def results(matrix_with_pivot_base, bas, n, pos, pr,flag):
             if variables[k] == bas[i]:
                 valor[k] = matrix_with_pivot_base[i][mA]
         if flag:
-            writer_big_m_method(False, "\n " + variables[k] + " " + str(valor[k]))
-        res+=("\n "+ variables[k] + " " + str(valor[k]))
+            writer_big_m_method(False, "\n " + variables[k] + " = " + str(valor[k]))
+        res+=("\n "+ variables[k] + " = " + str(valor[k]))
     if flag:
         writer_big_m_method(False, "\n " + variable+" = " + str(round_up(matrix_with_pivot_base[m][mA]) * (-1 if pr == 'max' else 1)))
     res += ("\n " + variable+" = " + str(round_up(matrix_with_pivot_base[m][mA]) * (-1 if pr == 'max' else 1)))
