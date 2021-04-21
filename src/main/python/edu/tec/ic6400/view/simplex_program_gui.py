@@ -248,6 +248,7 @@ class SimplexProgramGui(QMainWindow):
         if method_to_solve == "big m method":
             variable=(self.z_item.text())
             self.answers_label.setText("")
+            print(self.answers_label.text(),"este es el print")
             data = self.form_unaugmented_matrix()
             restriction_matrix = self.read_table_items(self.constraint_table, 0, self.constraint_table.rowCount(), 0,
                                                        self.constraint_table.columnCount() - 2)
@@ -286,7 +287,6 @@ class SimplexProgramGui(QMainWindow):
                 max_or_min = "min"
             if self.txt_generation_check_box.isChecked():
                 list_restriction_matrix = restriction_matrix.tolist()
-
                 self.answers_label.setText(big_m_method(list_restriction_matrix, equals_values, objective_values, conversion, max_or_min,True,variable))
             else:
                 list_restriction_matrix = restriction_matrix.tolist()

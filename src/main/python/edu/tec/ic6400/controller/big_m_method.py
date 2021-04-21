@@ -44,6 +44,9 @@ from src.main.python.edu.tec.ic6400.model.txt_method_writer import *
 error=""
 variable=""
 def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
+    global error
+    error=""
+    print(constraints,equals,objective,symbol,operation,flag,var)
     writer_big_m_method(True, "")
     global variable
     variable=var
