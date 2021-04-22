@@ -37,6 +37,24 @@ pip3 install qt-material
    ```sh
    python3 simplex-program.py
    ```
+3. The main window should appear, introduce the data for the problems and the options
+4. You can add more variables and restrictions (max of 17 variables)
+5. Choose to generate a .txt file with the solution or not
+6. Click on solve
+7. The solved problem should look something like this:
+
+![Problem solved Screen Shot](https://github.com/natanfdecastro/simplex-method-ic-6400/blob/main/src/resources/image(1).png)
+
+8. If you clicked generate .txt file, the resulting content of the file should look like this:
+
+* The statement of the problem:
+![Problem solved Screen Shot](https://github.com/natanfdecastro/simplex-method-ic-6400/blob/main/src/resources/statement.png)
+
+* The procedure of the solved problem (the tables and actions):
+![Problem solved Screen Shot](https://github.com/natanfdecastro/simplex-method-ic-6400/blob/main/src/resources/procedure(1).png)
+
+* The final solution for the problem:
+![Problem solved Screen Shot](https://github.com/natanfdecastro/simplex-method-ic-6400/blob/main/src/resources/result(1).png)
 
 <!-- LICENSE -->
 ## License
