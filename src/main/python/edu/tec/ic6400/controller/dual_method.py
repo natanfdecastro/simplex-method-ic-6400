@@ -57,7 +57,7 @@ class DualMethod:
 
     # table initialization
     def create_table(self, restriction_matrix, restriction_results):
-        self.table = np.zeros((self.constraints_len, self.variables_len + 1))  # коэффициенты таблицы
+        self.table = np.zeros((self.constraints_len, self.variables_len + 1))
 
         for i in range(self.constraints_len):
             for j in range(self.function_variables_len):
