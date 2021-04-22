@@ -4,7 +4,7 @@
 ## About The Project
 
 
-[![Product Screen Shot][product-screenshot]](https://github.com/natanfdecastro/simplex-method-ic-6400/blob/main/src/resources/main_screen.png)
+![Product Screen Shot](https://github.com/natanfdecastro/simplex-method-ic-6400/blob/main/src/resources/image.png)
 
 Implementation of the Simplex Method algorithm to solve linear programming maximization and minimization problems. 
 
