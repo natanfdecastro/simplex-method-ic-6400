@@ -327,6 +327,6 @@ def dual_method(max_min_operation_to_use, txt_generation_is_checked, objective_f
         result = dual_method_operation.show_solutions()
     else:
         result = "\n[!] The dual operation introduced doesn't have a solution \n W " \
-                 + max_min_operation_to_use + " =  ∞"
+                 + max_min_operation_to_use + " = ∞"
 
     return result

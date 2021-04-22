@@ -38,7 +38,7 @@ def txt_method_writer():
 # function that manipulates the text file with the solution of the big m method.
 def writer_dual_method(flag, text):
     # Change the path to access to the folder
-    path = "/home/natanfdecastro/Documents/tecnologico-de-costa-rica/ingenieria-computacion-411/ic-411-i-semestre-2021/ic-6400-investigacion-de-operaciones/simplex-method-ic-6400/src/resources/txt_solutions/two_phases/test.txt"
+    path = "/home/natanfdecastro/Documents/tecnologico-de-costa-rica/ingenieria-computacion-411/ic-411-i-semestre-2021/ic-6400-investigacion-de-operaciones/simplex-method-ic-6400/src/resources/txt_solutions/dual_method/test.txt"
     # open the text file
     if flag:
 
