@@ -118,7 +118,7 @@ class SimplexProgramGui(QMainWindow):
             self.method_combo_box.addItem(item)
 
         self.max_min_combo_box = QComboBox()
-        for item in ["Maximize", "Minimize"]:
+        for item in ["MAX", "MIN"]:
             self.max_min_combo_box.addItem(item)
 
         self.txt_generation_check_box = QCheckBox("Generate .txt solution file")
@@ -258,9 +258,15 @@ class SimplexProgramGui(QMainWindow):
         elif method_to_solve == "dual method":
 
             if self.txt_generation_check_box.isChecked():
-                dual_method(max_min_operation_to_use, True, objective_function, restriction_matrix, restriction_signs)
+                result = dual_method(max_min_operation_to_use, True, objective_function,
+                                     restriction_matrix, restriction_signs)
+                print(result)
+                self.answers_label.setText(result)
             else:
-                dual_method(max_min_operation_to_use, False, objective_function, restriction_matrix, restriction_signs)
+                result = dual_method(max_min_operation_to_use, False, objective_function,
+                                     restriction_matrix, restriction_signs)
+                print(result)
+                self.answers_label.setText(result)
         else:
             if self.txt_generation_check_box.isChecked():
                 two_phases_method(max_min_operation_to_use, True)
