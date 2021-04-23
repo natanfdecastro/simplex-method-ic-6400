@@ -53,6 +53,8 @@ def writer_dual_method(flag, text):
     else:
         file = open(path, "a")
 
+        file.writelines(text)
+
 #function that manipulates the text file with the solution of the big m method.
 def writer_big_m_method(flag,text):
     # Change the path to access to the folder
