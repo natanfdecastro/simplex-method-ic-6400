@@ -54,14 +54,25 @@ HEADER_SPACE = 11
 
 
 class SimplexProgramGui(QMainWindow):
-
+    """
+    Class that is in charge of
+    Inputs: None
+    Outputs: None
+    Restrictions: None
+    """
     def __init__(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
 
         # Extend the functionality of the Class method
         super(SimplexProgramGui, self).__init__()
 
         # Simplex main window properties
-        self.setWindowTitle("MENAlex Method Calculator")
+        self.setWindowTitle("SIMPLEX METHODS CALCULATOR")
         self.setStyleSheet("background-color: #000a12; font-family: Consolas; color: white")
 
         # Quitar y agregar en combo_box directamente con las variables globales
@@ -155,7 +166,12 @@ class SimplexProgramGui(QMainWindow):
         main_v_layout.addLayout(self.vbox_layout2)
 
     def compare_value_changed_column(self, new_column_count: int):
-
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         for ii in range(self.column_items_count, new_column_count):
             self.add_column_event()
         for ii in range(new_column_count, self.column_items_count):
@@ -163,7 +179,12 @@ class SimplexProgramGui(QMainWindow):
         self.column_items_count = new_column_count
 
     def compare_value_changed_row(self, new_row_count: int):
-
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         for ii in range(self.row_items_count, new_row_count):
             self.add_row_event()
         for ii in range(new_row_count, self.row_items_count):
@@ -171,6 +192,12 @@ class SimplexProgramGui(QMainWindow):
         self.row_items_count = new_row_count
 
     def create_table(self, rows, cols, equality_signs=None, horizontal_headers=None, vertical_headers=None):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         table = QTableWidget(self)
         table.setColumnCount(cols)
         table.setRowCount(rows)
@@ -199,23 +226,47 @@ class SimplexProgramGui(QMainWindow):
 
     @staticmethod
     def create_header_labels(num_of_variables):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         """Name the columns for the tables x1,x2,.... give a space and then add bi"""
         header_labels = [" " * HEADER_SPACE + "x" + str(i + 1) + " " * HEADER_SPACE for i in range(num_of_variables)]
         header_labels.extend([" " * HEADER_SPACE, " " * HEADER_SPACE + "LD" + " " * HEADER_SPACE])
         return header_labels
 
     def del_row_event(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         # allow a maximum of one constraint
         if self.constraint_table.rowCount() > 1:
             self.constraint_table.removeRow(self.constraint_table.rowCount() - 1)
 
     def del_col_event(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         # if we have x1,x2 and the signs and bi column don't allow deletion of column, else delete
         if self.constraint_table.columnCount() > 4:
             self.constraint_table.removeColumn(self.constraint_table.columnCount() - 3)
             self.objective_fxn_table.removeColumn(self.objective_fxn_table.columnCount() - 3)
 
     def add_column_event(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         self.constraint_table.insertColumn(self.constraint_table.columnCount() - 2)
         self.objective_fxn_table.insertColumn(self.objective_fxn_table.columnCount() - 2)
         self.constraint_table.setHorizontalHeaderLabels(
@@ -230,6 +281,12 @@ class SimplexProgramGui(QMainWindow):
             self.objective_fxn_table.verticalHeader().length() + self.objective_fxn_table.horizontalHeader().height())
 
     def add_row_event(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         self.constraint_table.insertRow(self.constraint_table.rowCount())
         equality_signs_combo = QComboBox()
         for item in self.CONSTRAINT_EQUALITY_SIGNS:
@@ -239,6 +296,12 @@ class SimplexProgramGui(QMainWindow):
         self.constraint_table.resizeRowsToContents()
 
     def solve_method(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
 
         method_to_solve = self.method_combo_box.currentText().lower()
         max_min_operation_to_use = self.max_min_combo_box.currentText().lower()
@@ -275,6 +338,12 @@ class SimplexProgramGui(QMainWindow):
 
     @staticmethod
     def read_table_items(table, start_row, end_row, start_col, end_col):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         read_table = np.zeros((end_row - start_row, end_col - start_col), dtype=sympy.Symbol)
         for i in range(start_row, end_row):
             for j in range(start_col, end_col):
@@ -284,12 +353,24 @@ class SimplexProgramGui(QMainWindow):
 
     @staticmethod
     def read_equality_signs(equality_signs_column, table):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         equality_signs = []
         for i in range(table.rowCount()):
             equality_signs.append(table.cellWidget(i, equality_signs_column).currentText())
         return equality_signs
 
     def form_unaugmented_matrix(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         obj_fxn = self.get_obj_fxn()
         split1_of_constraints = self.read_table_items(self.constraint_table, 0, self.constraint_table.rowCount(), 0,
                                                       self.constraint_table.columnCount() - 2)
@@ -302,6 +383,12 @@ class SimplexProgramGui(QMainWindow):
         return unaugmented_matrix
 
     def get_obj_fxn(self):
+        """
+        Function that is in charge of
+        Inputs: None
+        Outputs: None
+        Restrictions: None
+        """
         obj_fxn_coeff = self.read_table_items(self.objective_fxn_table, 0, self.objective_fxn_table.rowCount(), 0,
                                               self.objective_fxn_table.columnCount() - 2)
         obj_fxn = np.insert(obj_fxn_coeff, 0, 0)
