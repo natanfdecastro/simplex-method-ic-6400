@@ -147,7 +147,7 @@ def print_problem(constraints, equals, objective, ine, prob):
                     writer_big_m_method(False, f'x{j + 1}')
 
                 else:
-                    writer_big_m_method(False, f'x{j + 1}')
+                    writer_big_m_method(False, f'{t}x{j+1}')
 
         if ine[i] == 1:
             writer_big_m_method(False, ' \u2265 ' + str(copy_equals[i]) + ' ')
