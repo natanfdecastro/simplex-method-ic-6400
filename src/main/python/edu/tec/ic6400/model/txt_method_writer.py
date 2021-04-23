@@ -35,6 +35,7 @@ def txt_method_writer():
     print("txt_method_writer")
 
 
+
 # function that manipulates the text file with the solution of the big m method.
 def writer_dual_method(flag, text):
     # Change the path to access to the folder
@@ -51,4 +52,22 @@ def writer_dual_method(flag, text):
     # write to text file
     else:
         file = open(path, "a")
+
+#function that manipulates the text file with the solution of the big m method.
+def writer_big_m_method(flag,text):
+    # Change the path to access to the folder
+    path="/home/adriel/Escritorio/simplex-method-ic-6400/src/resources/txt_solutions/big_m_method/solucion_temporal.txt"
+    #open the text file
+    if flag:
+
+        file = open(path,"w")
+        file.close()
+    #Close the text file
+    elif flag==False and text == 2:
+        file = open(path,"a")
+        file.close()
+    #write to text file
+    else:
+        file = open(path,"a")
+
         file.writelines(text)
