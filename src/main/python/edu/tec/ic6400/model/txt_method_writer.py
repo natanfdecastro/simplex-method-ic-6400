@@ -53,6 +53,7 @@ def writer_dual_method(flag, text):
     # write to text file
     else:
         file = open(txt_answer_file_path, "a")
+        file.writelines(text)
 
 
 # function that manipulates the text file with the solution of the big m method.

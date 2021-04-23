@@ -368,8 +368,8 @@ class DualMethod:
                 dual_operation_variables = ' + '.join([self.show_coefficients(posterior_coefficient, i)
                                                        for i, posterior_coefficient
                                                        in enumerate(row[:self.function_variables_len])
-                                                       if posterior_coefficient != 0]) + " " + \
-                                           str(self.restriction_signs[i]) + " " + str(row[-1]) + '\n '
+                                                       if posterior_coefficient != 0]) + " " \
+                                           + "<=" + str(row[-1]) + '\n '
                 # Writes in the txt file
                 writer_dual_method(False, dual_operation_variables)
                 # Close the txt file
