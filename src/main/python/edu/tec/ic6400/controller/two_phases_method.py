@@ -44,7 +44,7 @@ number_variables = 0
 matrix = []
 txt_answer_file = sys.path[1] + '/src/resources/txt_solutions/two_phases/two_phases_answers.txt'
 file = ''
-
+answer = ''
 
 '''
     This function clean all de global variables 
@@ -86,6 +86,9 @@ def two_phases_method(max_min_operation_to_use, txt_generation_is_checked, objec
 
     clear()
 
+    return answer
+
+
 
 '''
     This function creates a list of n zeros 
@@ -99,7 +102,7 @@ def list_zeros_creator(n):
     This function starts the first actions to start the simplex method to complete the two phases method
 '''
 def first_phase():
-    global slack_variables, artificial_variables, number_variables, file
+    global slack_variables, artificial_variables, number_variables, file, answer
     artificial_index = number_variables + slack_variables + 1
     for i in range(artificial_index,len(matrix[1])-1):
         if(matrix[1][i] == -1):
@@ -109,7 +112,7 @@ def first_phase():
     for i in range(1,len(matrix[1])):
         matrix[1][i] *= -1
     if txt_generation:
-        file.write("primera matrix \n")
+        file.write("initial matrix \n\n")
         file.write(matrix_to_string())
     simplex_method(1)
     if matrix[1][-1] == 0:
@@ -117,7 +120,8 @@ def first_phase():
 
     else:
         if txt_generation:
-            file.write("No es posible solucionar este problema.")
+            file.write("Its impossible answered the problem.")
+        answer = 'Its impossible answered the problem.'
 
 
 '''
@@ -169,6 +173,10 @@ def set_variables():
             artificial_variables += 1
         else:
             artificial_variables += 1
+
+
+
+
 
 
 '''
@@ -277,8 +285,12 @@ def matrix_to_string():
 
 # -----------------------------------------------Simplex Method------------------------------------------------------- #
 
+'''
+    This function is for apply the simplex method to the matri
+'''
 def simplex_method(iteration):
-    global file
+    global file, answer
+
     mnv = determine_minimum_negative_variable()
 
     # When there is no negative variables, the simplex method ends
@@ -292,16 +304,17 @@ def simplex_method(iteration):
         # When there is no elegible restriction, means that there is no solution with simplex
         if restriction[0] == None:
             if txt_generation:
-                file.write("El problema no está acotado" + "\n")
-                file.write(str(mnv[0]) + " puede crecer tanto como quiera" + "\n")
+                file.write("the problem is not limited" + "\n")
+                file.write(str(mnv[0]) + " the problem can grow to infinity" + "\n")
+            answer = 'the problem is not limited, '+ str(mnv[0]) + 'the problem can grow to infinity'
         else:
             # Prints the current iteration and graphs the current state of the matrix
             if txt_generation:
                 file.write("" + "\n")
-                file.write("Iteración " + str(iteration) + "\n")
-                file.write("Variable básica que entra: " + mnv[0] + "\n")
-                file.write("Variable básica que sale: " + restriction[0] + "\n")
-                file.write("Pivote: " + str(matrix[restriction[2]][mnv[2]]) + "\n")
+                file.write("Iteration " + str(iteration) + "\n")
+                file.write("Basic variable in: " + mnv[0] + "\n")
+                file.write("Basic variable out: " + restriction[0] + "\n")
+                file.write("Pivot: " + str(matrix[restriction[2]][mnv[2]]) + "\n")
 
             matrix[restriction[2]][0] = mnv[0]
             row_operations(mnv[2], restriction[2])
@@ -397,22 +410,22 @@ Function that prints the final solution of the matrix, it also checks if the ans
 and does some simple final changes.
 '''
 def print_solution():
-    global file
+    global file, answer
     if flagDeg:
         if txt_generation:
             file.write("" + "\n")
-            file.write("Solución Degenerada" + "\n")
+            file.write("Degenerate Solution" + "\n")
     if extra_solutions:
         if txt_generation:
             file.write("" + "\n")
-            file.write("Solución Multiple" + "\n")
+            file.write("Multiple Solution" + "\n")
     if not extra_solutions and not flagDeg:
         if txt_generation:
             file.write("" + "\n")
-            file.write("Solución" + "\n")
+            file.write("Solution" + "\n")
     if txt_generation:
         file.write("" + "\n")
-        file.write("Valor de las variables:" + "\n")
+        file.write("Value of variables: " + "\n")
     answer = {}
     # Finds every variable
     for column in matrix[0]:
@@ -430,14 +443,18 @@ def print_solution():
     for variable in sorted(answer.keys()):
         file.write(variable + " = " + str(answer[variable]) + "\n")
     # Prints the optimal value of z
-
+    answer = 'The optimal value is: '  + str(answer["U"])
     if txt_generation:
-        file.write("Por lo tanto el valor óptimo de U es: " + "\n")
+
+        file.write("\nThe optimal value is: " + "\n")
         file.write("U = " + str(answer["U"]) + "\n")
 
 
 def second_phase():
-    global slack_variables, number_variables
+
+    global slack_variables, number_variables, restriction_signs, matrix
+    print(matrix_to_string())
+    print(number_variables + slack_variables + 1)
     i = 0
     while(i < len(matrix)):
         j = 0

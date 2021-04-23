@@ -263,9 +263,9 @@ class SimplexProgramGui(QMainWindow):
                 dual_method(max_min_operation_to_use, False, objective_function, restriction_matrix, restriction_signs)
         else:
             if self.txt_generation_check_box.isChecked():
-                two_phases_method(max_min_operation_to_use, True, objective_function, restriction_matrix, restriction_signs)
+                self.answers_label.setText(two_phases_method(max_min_operation_to_use, True, objective_function, restriction_matrix, restriction_signs))
             else:
-                two_phases_method(max_min_operation_to_use, False, objective_function, restriction_matrix, restriction_signs)
+                self.answers_label.setText(two_phases_method(max_min_operation_to_use, False, objective_function, restriction_matrix, restriction_signs))
 
     @staticmethod
     def read_table_items(table, start_row, end_row, start_col, end_col):
