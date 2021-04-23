@@ -59,7 +59,6 @@ def writer_big_m_method(flag,text):
     path="/home/adriel/Escritorio/simplex-method-ic-6400/src/resources/txt_solutions/big_m_method/solucion_temporal.txt"
     #open the text file
     if flag:
-
         file = open(path,"w")
         file.close()
     #Close the text file
