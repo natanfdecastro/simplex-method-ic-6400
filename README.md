@@ -1,5 +1,9 @@
 # simplex-method-ic-6400
 
+
+## Description
+Implementation of the Simplex Method algorithm to solve linear programming maximization and minimization problems. 
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -69,3 +73,4 @@ Distributed under the  GPL-3.0 License. See `LICENSE` for more information.
 Natán Fernández de Castro - [@natanfdecastro](https://twitter.com/natanfdecastro) - natanfdecastro@protonmail.com
 
 Project Link: [https://github.com/natanfdecastro/simplex-method-ic-6400](https://github.com/natanfdecastro/simplex-method-ic-6400)
+
