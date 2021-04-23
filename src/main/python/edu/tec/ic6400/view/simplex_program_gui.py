@@ -443,6 +443,6 @@ class SimplexProgramGui(QMainWindow):
 if __name__ == "__main__":
     simplex_app = QApplication(sys.argv)
     simplex_main_window = SimplexProgramGui()
-    #apply_stylesheet(simplex_app, theme='dark_cyan.xml')
+    apply_stylesheet(simplex_app, theme='dark_cyan.xml')
     simplex_main_window.show()
     sys.exit(simplex_app.exec())

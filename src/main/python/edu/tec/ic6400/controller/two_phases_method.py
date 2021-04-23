@@ -25,7 +25,6 @@ Copyright (C) 2021 Natan & Diego & Adriel
 # Standard library imports
 import sys
 
-
 # Third party imports
 
 # Local application imports
@@ -42,15 +41,17 @@ slack_variables = 0
 artificial_variables = 0
 number_variables = 0
 matrix = []
-txt_answer_file = sys.path[1] + '/src/resources/txt_solutions/two_phases/two_phases_answers.txt'
+txt_answer_file = sys.path[1] + '/src/resources/txt_solutions/two_phases/solucion_temporal.txt'
 file = ''
 answer = ''
 
 '''
     This function clean all de global variables 
 '''
+
+
 def clear():
-    global operation_to_use,txt_generation,objective_function,restriction_matrix,restriction_signs,slack_variables,artificial_variables,number_variables,matrix,file,extra_solutions,flagDeg
+    global operation_to_use, txt_generation, objective_function, restriction_matrix, restriction_signs, slack_variables, artificial_variables, number_variables, matrix, file, extra_solutions, flagDeg
     extra_solutions = False
     flagDeg = False
     operation_to_use = ''
@@ -68,14 +69,17 @@ def clear():
 '''
     This function ist the start function, here al global variables set, and starts the process of the two phases method
 '''
-def two_phases_method(max_min_operation_to_use, txt_generation_is_checked, objective_function_original, restriction_matrix_original, restriction_signs_original):
+
+
+def two_phases_method(max_min_operation_to_use, txt_generation_is_checked, objective_function_original,
+                      restriction_matrix_original, restriction_signs_original):
     global operation_to_use, txt_generation, objective_function, restriction_matrix, restriction_signs, number_variables, file, txt_answer_file
     operation_to_use = max_min_operation_to_use
     txt_generation = txt_generation_is_checked
     objective_function = objective_function_original.tolist()
     restriction_matrix = restriction_matrix_original.tolist()
     restriction_signs = restriction_signs_original
-    number_variables = len(restriction_matrix[1])-1
+    number_variables = len(restriction_matrix[1]) - 1
     file = open(txt_answer_file, 'w')
 
     create_initial_matrix()
@@ -89,27 +93,30 @@ def two_phases_method(max_min_operation_to_use, txt_generation_is_checked, objec
     return answer
 
 
-
 '''
     This function creates a list of n zeros 
     :parameter-> n= number of zeros to hold the list
 '''
+
+
 def list_zeros_creator(n):
-    return [float(0)]*n
+    return [float(0)] * n
 
 
 '''
     This function starts the first actions to start the simplex method to complete the two phases method
 '''
+
+
 def first_phase():
     global slack_variables, artificial_variables, number_variables, file, answer
     artificial_index = number_variables + slack_variables + 1
-    for i in range(artificial_index,len(matrix[1])-1):
-        if(matrix[1][i] == -1):
-            for j in range(1,len(matrix)):
-                if (matrix[j][i]== 1):
+    for i in range(artificial_index, len(matrix[1]) - 1):
+        if (matrix[1][i] == -1):
+            for j in range(1, len(matrix)):
+                if (matrix[j][i] == 1):
                     sum_row(j)
-    for i in range(1,len(matrix[1])):
+    for i in range(1, len(matrix[1])):
         matrix[1][i] *= -1
     if txt_generation:
         file.write("initial matrix \n\n")
@@ -128,15 +135,19 @@ def first_phase():
     This function adds the row in parameter with the objective function to eliminate the artificial variables
     :parameter -> j= index of the row to add
 '''
+
+
 def sum_row(j):
     global matrix
-    for i in range(1,len(matrix[1])):
+    for i in range(1, len(matrix[1])):
         matrix[1][i] = matrix[1][i] + matrix[j][i]
 
 
 '''
     This function create a empty matrix to for a the two phases method
 '''
+
+
 def set_empty_matrix():
     global slack_variables, artificial_variables, number_variables, restriction_matrix
     temp = ["VB"]
@@ -163,6 +174,8 @@ def set_empty_matrix():
 '''
     This function is to count how many slack and artificial variables
 '''
+
+
 def set_variables():
     global slack_variables, artificial_variables, restriction_signs
     for i in range(0, len(restriction_signs)):
@@ -175,15 +188,13 @@ def set_variables():
             artificial_variables += 1
 
 
-
-
-
-
 '''
     This function creates the initial matrix to perform the two phases method
 '''
+
+
 def create_initial_matrix():
-    global  matrix
+    global matrix
     set_empty_matrix()
     matrix[1][0] = "U"
     create_new_objetive_function()
@@ -193,6 +204,8 @@ def create_initial_matrix():
 '''
     This function makes the new objective function and adds to the matrix
 '''
+
+
 def create_new_objetive_function():
     global artificial_variables, restriction_matrix
     for i in range(1, len(restriction_matrix[1])):
@@ -212,45 +225,51 @@ def create_new_objetive_function():
 '''
     This function insert the values of variables in the matrix
 '''
+
+
 def set_variables_to_matrix():
-    global restriction_signs, restriction_matrix, matrix,number_variables, slack_variables
+    global restriction_signs, restriction_matrix, matrix, number_variables, slack_variables
     slack_index = number_variables + 1
-    artificial_index = number_variables + slack_variables +1
-    for i in range(2,len(restriction_matrix)+1):
-        if restriction_signs[i-2] == "≤":
+    artificial_index = number_variables + slack_variables + 1
+    for i in range(2, len(restriction_matrix) + 1):
+        if restriction_signs[i - 2] == "≤":
             matrix[i][0] = matrix[0][slack_index]
             matrix[i][slack_index] = float(1)
             slack_index += 1
-        elif restriction_signs[i-2] == "≥":
+        elif restriction_signs[i - 2] == "≥":
             matrix[i][0] = matrix[0][artificial_index]
             matrix[i][slack_index] = float(-1)
             slack_index += 1
             matrix[i][artificial_index] = float(1)
             artificial_index += 1
-        elif restriction_signs[i-2] == "=":
+        elif restriction_signs[i - 2] == "=":
             matrix[i][0] = matrix[0][artificial_index]
             matrix[i][artificial_index] = float(1)
             artificial_index += 1
 
-    for i in range(1,len(restriction_matrix)):
+    for i in range(1, len(restriction_matrix)):
         matrix[i + 1][len(matrix[i]) - 1] = restriction_matrix[i][0]
-        for j in range(1,len(restriction_matrix[i])):
-            matrix[i+1][j] = restriction_matrix[i][j]
+        for j in range(1, len(restriction_matrix[i])):
+            matrix[i + 1][j] = restriction_matrix[i][j]
 
 
 '''
     This function reserch in objetive function to verify if exist more than one solution
 '''
+
+
 def check_extra_solution():
     global extra_solutions
-    for i in range(number_variables+1,len(matrix[1])):
-                   if matrix[1][i] == 0:
-                       extra_solutions = True
+    for i in range(number_variables + 1, len(matrix[1])):
+        if matrix[1][i] == 0:
+            extra_solutions = True
 
 
 '''
     This function is for check what collum will be the pivot 
 '''
+
+
 def get_most_negative_variable():
     answer = [None, 0, 0]  # The answer has the form [variable,value,number of column]
     var_amount = len(matrix[0]) - 1  # Gets the amount of variables in the matrix
@@ -268,6 +287,8 @@ def get_most_negative_variable():
 '''
     This function returns a string with the matrix in rows for to print
 '''
+
+
 def matrix_to_string():
     answer = ""
     for line in matrix:
@@ -288,6 +309,8 @@ def matrix_to_string():
 '''
     This function is for apply the simplex method to the matri
 '''
+
+
 def simplex_method(iteration):
     global file, answer
 
@@ -306,7 +329,7 @@ def simplex_method(iteration):
             if txt_generation:
                 file.write("the problem is not limited" + "\n")
                 file.write(str(mnv[0]) + " the problem can grow to infinity" + "\n")
-            answer = 'the problem is not limited, '+ str(mnv[0]) + 'the problem can grow to infinity'
+            answer = 'the problem is not limited, ' + str(mnv[0]) + 'the problem can grow to infinity'
         else:
             # Prints the current iteration and graphs the current state of the matrix
             if txt_generation:
@@ -329,6 +352,8 @@ def simplex_method(iteration):
 '''
 Function that determines the minimum negative value of a variable of the matrix.
 '''
+
+
 def determine_minimum_negative_variable():
     answer = [None, 0, 0]  # The answer has the form [variable,value,number of column]
     var_amount = len(matrix[0]) - 1  # Gets the amount of variables in the matrix
@@ -346,6 +371,8 @@ def determine_minimum_negative_variable():
 '''
 Function that determines the restriction selected according to the minimum negative variable (mnv)
 '''
+
+
 def determine_restriction(mnv, iteration):
     global flagDeg
     divisions = []
@@ -377,10 +404,13 @@ def determine_restriction(mnv, iteration):
 '''
 This function is used to apply the necesary operations on the matrix for the current iteration.
 '''
+
+
 def row_operations(mnv, restriction):
     row_amount = len(matrix)
     column_amount = len(matrix[0])
-    # Calculates the inverse multiplicative of the mnv value in the choosen restriction in order to multiply them and make sure the result is 1
+    # Calculates the inverse multiplicative of the mnv value in the choosen restriction
+    # in order to multiply them and make sure the result is 1
     inverse_multiplicative = 1 / matrix[restriction][mnv]
     j = 1
 
@@ -409,6 +439,8 @@ def row_operations(mnv, restriction):
 Function that prints the final solution of the matrix, it also checks if the answer is degenerate
 and does some simple final changes.
 '''
+
+
 def print_solution():
     global file, answer
     if flagDeg:
@@ -437,50 +469,48 @@ def print_solution():
         if row[0][0] in ["x", "U", "r", "s"]:
             answer[row[0]] = row[-1]
 
-    if operation_to_use == "minimize" :
+    if operation_to_use == "minimize":
         answer["U"] *= -1
     # Prints every value
     for variable in sorted(answer.keys()):
         file.write(variable + " = " + str(answer[variable]) + "\n")
     # Prints the optimal value of z
-    answer = 'The optimal value is: '  + str(answer["U"])
+    answer = 'The optimal value is: ' + str(answer["U"])
     if txt_generation:
-
         file.write("\nThe optimal value is: " + "\n")
         file.write("U = " + str(answer["U"]) + "\n")
 
 
 def second_phase():
-
     global slack_variables, number_variables, restriction_signs, matrix
     print(matrix_to_string())
     print(number_variables + slack_variables + 1)
     i = 0
-    while(i < len(matrix)):
+    while (i < len(matrix)):
         j = 0
-        while(j < slack_variables):
+        while (j < slack_variables):
             matrix[i].pop(number_variables + slack_variables + 1)
             j += 1
         i += 1
 
     i = 1
-    while(i <= number_variables):
-        matrix[1][i] = -1*objective_function[i]
+    while (i <= number_variables):
+        matrix[1][i] = -1 * objective_function[i]
         i += 1
 
     i = 2
-    while(i < len(matrix)):
+    while (i < len(matrix)):
         j = 1
         multiplier = abs(matrix[1][matrix[i].index(1)])
-        while(j < len(matrix[1])):
+        while (j < len(matrix[1])):
             matrix[1][j] = round(round(matrix[i][j] * multiplier, 2) + matrix[1][j], 2)
             j += 1
         i += 1
     j = 1
-    while(j<len(matrix[1])):
-        matrix[1][j]*=-1
-        j+=1
-    #print(matrix_to_string())
+    while (j < len(matrix[1])):
+        matrix[1][j] *= -1
+        j += 1
+    # print(matrix_to_string())
     if txt_generation:
         file.write(matrix_to_string())
 

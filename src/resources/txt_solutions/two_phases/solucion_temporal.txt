@@ -1,0 +1,42 @@
+initial matrix 
+
+VB      x1      x2      x3      s1      s2      r1      r2      LD      
+U       -4.0    -6.0    -2.0    1.0     1.0     -0.0    -0.0    -14.0   
+r1      1.0     4.0     2.0     -1.0    0.0     1.0     0.0     8.0     
+r2      3.0     2.0     0.0     0.0     -1.0    0.0     1.0     6.0     
+
+Iteration 1
+Basic variable in: x2
+Basic variable out: r1
+Pivot: 4.0
+
+VB      x1      x2      x3      s1      s2      r1      r2      LD      
+U       -2.5    0.0     1.0     -0.5    1.0     1.5     0.0     -2.0    
+x2      0.25    1.0     0.5     -0.25   0.0     0.25    0.0     2.0     
+r2      2.5     0.0     -1.0    0.5     -1.0    -0.5    1.0     2.0     
+
+
+Iteration 2
+Basic variable in: x1
+Basic variable out: r2
+Pivot: 2.5
+
+VB      x1      x2      x3      s1      s2      r1      r2      LD      
+U       0.0     0.0     0.0     0.0     0.0     1.0     1.0     0.0     
+x2      0.0     1.0     0.6     -0.3    0.1     0.3     -0.1    1.8     
+x1      1.0     0.0     -0.4    0.2     -0.4    -0.2    0.4     0.8     
+
+
+Multiple Solution
+
+Value of variables: 
+U = 0.0
+r1 = 0
+r2 = 0
+s1 = 0
+s2 = 0
+x1 = 0.8
+x2 = 1.8
+x3 = 0
+
+The optimal value is: 

@@ -22,8 +22,8 @@ Copyright (C) 2021 Natan & Diego & Adriel
 ========================================================================
 """
 
-
 # Standard library imports
+import sys
 
 
 # Third party imports
@@ -35,38 +35,41 @@ def txt_method_writer():
     print("txt_method_writer")
 
 
-
 # function that manipulates the text file with the solution of the big m method.
 def writer_dual_method(flag, text):
+
     # Change the path to access to the folder
-    path = "/home/natanfdecastro/Documents/tecnologico-de-costa-rica/ingenieria-computacion-411/ic-411-i-semestre-2021/ic-6400-investigacion-de-operaciones/simplex-method-ic-6400/src/resources/txt_solutions/dual_method/test.txt"
+    txt_answer_file_path = sys.path[1] + '/src/resources/txt_solutions/dual_method/solucion_temporal.txt'
+
     # open the text file
     if flag:
 
-        file = open(path, "w")
+        file = open(txt_answer_file_path, "w")
         file.close()
     # Close the text file
     elif flag == False and text == 2:
-        file = open(path, "a")
+        file = open(txt_answer_file_path, "a")
         file.close()
     # write to text file
     else:
-        file = open(path, "a")
+        file = open(txt_answer_file_path, "a")
 
-#function that manipulates the text file with the solution of the big m method.
-def writer_big_m_method(flag,text):
+
+# function that manipulates the text file with the solution of the big m method.
+def writer_big_m_method(flag, text):
+
     # Change the path to access to the folder
-    path="/home/adriel/Escritorio/simplex-method-ic-6400/src/resources/txt_solutions/big_m_method/solucion_temporal.txt"
-    #open the text file
+    txt_answer_file_path = sys.path[1] + '/src/resources/txt_solutions/big_m_method/solucion_temporal.txt'
+    # open the text file
     if flag:
-        file = open(path,"w")
+        file = open(txt_answer_file_path, "w")
         file.close()
-    #Close the text file
-    elif flag==False and text == 2:
-        file = open(path,"a")
+    # Close the text file
+    elif flag == False and text == 2:
+        file = open(txt_answer_file_path, "a")
         file.close()
-    #write to text file
+    # write to text file
     else:
-        file = open(path,"a")
+        file = open(txt_answer_file_path, "a")
 
         file.writelines(text)

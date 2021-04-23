@@ -39,17 +39,18 @@ from PyQt5.QtWidgets import (
 from src.main.python.edu.tec.ic6400.view.simplex_program_gui import *
 from src.main.python.edu.tec.ic6400.model.txt_method_writer import *
 
-
-#stores the error message
+# stores the error message
 error = ""
-#stores the character of the variable
+# stores the character of the variable
 variable = ""
-def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
+
+
+def big_m_method(constraints, equals, objective, symbol, operation, flag, var):
     global error
     error = ""
     writer_big_m_method(True, "")
     global variable
-    #Update the variable from the objective function
+    # Update the variable from the objective function
     variable = var
     writer_big_m_method(True, "")
     M_value = 100
@@ -58,14 +59,14 @@ def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
     if flag:
         print_problem(constraints, equals, objective, symbol, operation)
         writer_big_m_method(False, "\nInitial table")
-        writer_big_m_method(False,2)
+        writer_big_m_method(False, 2)
         print_table(matrix, basic, variables)
     if flag:
-        writer_big_m_method(False,"\nTable with M variables")
+        writer_big_m_method(False, "\nTable with M variables")
         writer_big_m_method(False, 2)
         print_table(matrix_with_pivot_base, basic, variables)
         writer_big_m_method(False, "\nBasic variables =")
-        writer_big_m_method(False,basic)
+        writer_big_m_method(False, basic)
 
         writer_big_m_method(False, "\nIndex of basic variables =")
         writer_big_m_method(False, str(pos))
@@ -78,16 +79,16 @@ def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
             basic[index[0] - 1] = variables[index[1] - 1]
             if flag:
                 writer_big_m_method(False, "\n Step: " + str(k + 1) + ": pivot found in index=" + str(index))
-                writer_big_m_method(False,2)
+                writer_big_m_method(False, 2)
                 print_table(matrix_with_pivot_base, basic, variables)
-    if check_error(matrix_with_pivot_base, M_value, variables,flag) == "":
+    if check_error(matrix_with_pivot_base, M_value, variables, flag) == "":
         if flag:
-            writer_big_m_method(False,"\n Solution:")
-            writer_big_m_method(False,2)
+            writer_big_m_method(False, "\n Solution:")
+            writer_big_m_method(False, 2)
 
-        return results(matrix_with_pivot_base, basic, len(objective), pos, operation,flag)
+        return results(matrix_with_pivot_base, basic, len(objective), pos, operation, flag)
     else:
-        writer_big_m_method(False,2)
+        writer_big_m_method(False, 2)
         if flag:
             print_table(matrix_with_pivot_base, basic, variables)
         else:
@@ -96,11 +97,10 @@ def big_m_method(constraints, equals,objective,symbol,operation,flag,var):
 
 
 def print_problem(constraints, equals, objective, ine, prob):
-
     copy_constraints = copy.deepcopy(constraints)
     copy_equals = copy.deepcopy(equals)
     copy_objective = copy.deepcopy(objective)
-    #variables that store the length of the list
+    # variables that store the length of the list
     n = len(objective)
     m = len(equals)
     # Objective Function
@@ -129,7 +129,7 @@ def print_problem(constraints, equals, objective, ine, prob):
         for j in range(n):
             t = constraints[i][j]
             if t == 0:
-                writer_big_m_method(False,'   ')
+                writer_big_m_method(False, '   ')
 
             else:
                 if j > 0:
@@ -147,7 +147,7 @@ def print_problem(constraints, equals, objective, ine, prob):
                     writer_big_m_method(False, f'x{j + 1}')
 
                 else:
-                    writer_big_m_method(False, f'{t}x{j+1}')
+                    writer_big_m_method(False, f'{t}x{j + 1}')
 
         if ine[i] == 1:
             writer_big_m_method(False, ' \u2265 ' + str(copy_equals[i]) + ' ')
@@ -155,7 +155,7 @@ def print_problem(constraints, equals, objective, ine, prob):
             writer_big_m_method(False, ' \u2264 ' + str(copy_equals[i]) + ' ')
 
         elif ine[i] == 0:
-            writer_big_m_method(False,' = ' + str(copy_equals[i]))
+            writer_big_m_method(False, ' = ' + str(copy_equals[i]))
 
     # variables >= 0
     writer_big_m_method(False, '\n  ')
@@ -168,11 +168,11 @@ def print_problem(constraints, equals, objective, ine, prob):
     writer_big_m_method(False, 2)
 
 
-def check_error(matrix_with_pivot_base, M, var,flag):
+def check_error(matrix_with_pivot_base, M, var, flag):
     global error
     n = len(matrix_with_pivot_base[0]) - 1
     m = len(matrix_with_pivot_base) - 1
-    #flags indicating the type of error
+    # flags indicating the type of error
     flag_not_limited_error = 0
     flag_infeasible_error = 0
     for j in range(n):
@@ -184,15 +184,18 @@ def check_error(matrix_with_pivot_base, M, var,flag):
             var_error = (var[j][0:2])
             flag_infeasible_error = 1
     if flag_infeasible_error:
-        error=("\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable: " + var_error + ".")
+        error = (
+                    "\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable: " + var_error + ".")
         if flag:
             """
             f.writelines(
             "\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable" + var_error + ".")
             """
-            writer_big_m_method(False, "\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable" + var_error + ".")
+            writer_big_m_method(False,
+                                "\n Error: The problem is not limited.\n      It grows indifinitely in the direction of the variable" + var_error + ".")
     if flag_not_limited_error:
-        error=('\n Error: The iterations have completed and there are artificial variables in the base with values strictly greater than 0,\n '
+        error = (
+            '\n Error: The iterations have completed and there are artificial variables in the base with values strictly greater than 0,\n '
             'so the problem has no solution (infeasible).')
         if flag:
             """
@@ -222,7 +225,6 @@ def table(constraints, equals, objective, symbol, operation, M):
     pos_base = []
     len_objetive = len(copy_objective)
     len_constraints = len(copy_constraints)
-
 
     for j in range(len_objetive):
         variables.append(f"x{j + 1}")
@@ -270,14 +272,14 @@ def pivot(vector_pivot, pivot_index):
     i, j = pivot_index[0] - 1, pivot_index[1] - 1
     pivot = vector[i][j]
     vector[i] = [element / pivot for
-            element in vector[i]]
+                 element in vector[i]]
     for index, row in enumerate(vector):
         if index != i:
             row_scale = [y * vector[index][j]
                          for y in vector[i]]
             vector[index] = [x - y for x, y in
-                        zip(vector[index],
-                            row_scale)]
+                             zip(vector[index],
+                                 row_scale)]
     return vector
 
 
@@ -343,6 +345,7 @@ def append_col(list, vector):
         copy_list[i] += [copy_vector[i]]  # add to the end of the sum
     return copy_list
 
+
 # Gets a vector from matrix
 def v_col(matrix, column):
     copy_len = copy.deepcopy(column)
@@ -359,30 +362,31 @@ def print_table(matrix, basic, variables):
     copy_matrix = copy.deepcopy(matrix)
     copy_variables = copy.deepcopy(variables)
     copy_basic = copy.deepcopy(basic)
-    copy_basic.append(variable+' ')
+    copy_basic.append(variable + ' ')
 
-    writer_big_m_method(False,'\n       ')
+    writer_big_m_method(False, '\n       ')
 
     for i in copy_variables:
-        writer_big_m_method(False,'{0:7}'.format(i))
-    writer_big_m_method(False,'\n')
+        writer_big_m_method(False, '{0:7}'.format(i))
+    writer_big_m_method(False, '\n')
     for k in range(0, len(copy_matrix)):
         writer_big_m_method(False, copy_basic[k])
         for j in range(0, len(copy_matrix[k])):
             val = round_up(copy_matrix[k][j])
             writer_big_m_method(False, '{0:7.1f}'.format(val))
         writer_big_m_method(False, '\n')
-    writer_big_m_method(False,2)
+    writer_big_m_method(False, 2)
+
 
 def round_up(x):
     x = math.ceil(x * 10000) / 10000
     return x
 
 
-#Shows the final results
-def results(matrix_with_pivot_base, bas, n, pos, pr,flag):
+# Shows the final results
+def results(matrix_with_pivot_base, bas, n, pos, pr, flag):
     global variable
-    res="\n " +"Solution"
+    res = "\n " + "Solution"
     variables = []
     valor = []
     m = len(bas)  # number of constraints or basic variables
@@ -395,9 +399,10 @@ def results(matrix_with_pivot_base, bas, n, pos, pr,flag):
                 valor[k] = matrix_with_pivot_base[i][mA]
         if flag:
             writer_big_m_method(False, "\n " + variables[k] + " = " + str(valor[k]))
-        res+=("\n "+ variables[k] + " = " + str(valor[k]))
+        res += ("\n " + variables[k] + " = " + str(valor[k]))
     if flag:
-        writer_big_m_method(False, "\n " + variable+" = " + str(round_up(matrix_with_pivot_base[m][mA]) * (-1 if pr == 'max' else 1)))
-    res += ("\n " + variable+" = " + str(round_up(matrix_with_pivot_base[m][mA]) * (-1 if pr == 'max' else 1)))
-    writer_big_m_method(False,2)
+        writer_big_m_method(False, "\n " + variable + " = " + str(
+            round_up(matrix_with_pivot_base[m][mA]) * (-1 if pr == 'max' else 1)))
+    res += ("\n " + variable + " = " + str(round_up(matrix_with_pivot_base[m][mA]) * (-1 if pr == 'max' else 1)))
+    writer_big_m_method(False, 2)
     return res
