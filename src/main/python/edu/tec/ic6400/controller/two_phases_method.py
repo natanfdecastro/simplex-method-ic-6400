@@ -106,11 +106,12 @@ def first_phase():
                     sum_row(j)
     for i in range(1,len(matrix[1])):
         matrix[1][i] *= -1
-
+    file.write("primera matrix")
+    file.write(matrix_to_string())
     simplex_method(1)
     if matrix[1][-1] == 0:
-        #second_phase()
-        print('second phase')
+        second_phase()
+
     else:
         file.write("No es posible solucionar este problema.")
 
@@ -415,7 +416,7 @@ def print_solution():
         if row[0][0] in ["x", "U", "r", "s"]:
             answer[row[0]] = row[-1]
 
-    if operation_to_use == "min" :
+    if operation_to_use == "minimize" :
         answer["U"] *= -1
     # Prints every value
     for variable in sorted(answer.keys()):
@@ -424,7 +425,7 @@ def print_solution():
     file.write("Por lo tanto el valor óptimo de U es: " + "\n")
     file.write("U = " + str(answer["U"]) + "\n")
 
-'''
+
 def second_phase():
     global slack_variables, number_variables
     i = 0
@@ -437,7 +438,7 @@ def second_phase():
 
     i = 1
     while(i <= number_variables):
-        matrix[1][i] = -1*float(Lines[1][i-1])
+        matrix[1][i] = -1*objective_function[i]
         i += 1
 
     i = 2
@@ -453,5 +454,5 @@ def second_phase():
         matrix[1][j]*=-1
         j+=1
     #print(matrix_to_string())
-    initialize_simplex()
-'''
+    file.write(matrix_to_string())
+    simplex_method(1)
