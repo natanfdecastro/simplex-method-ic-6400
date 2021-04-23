@@ -469,16 +469,17 @@ def print_solution():
         if row[0][0] in ["x", "U", "r", "s"]:
             answer[row[0]] = row[-1]
 
-    if operation_to_use == "minimize":
+    if operation_to_use == "min":
         answer["U"] *= -1
     # Prints every value
-    for variable in sorted(answer.keys()):
-        file.write(variable + " = " + str(answer[variable]) + "\n")
-    # Prints the optimal value of z
-    answer = 'The optimal value is: ' + str(answer["U"])
     if txt_generation:
-        file.write("\nThe optimal value is: " + "\n")
+        for variable in sorted(answer.keys()):
+            file.write(variable + " = " + str(answer[variable]) + "\n")
+        # Prints the optimal value of z
+        file.write("The optimal solution for U is: " + "\n")
         file.write("U = " + str(answer["U"]) + "\n")
+
+    answer= "The optimal solution for U is: " + "U = " + str(answer["U"])
 
 
 def second_phase():
@@ -486,9 +487,9 @@ def second_phase():
     print(matrix_to_string())
     print(number_variables + slack_variables + 1)
     i = 0
-    while (i < len(matrix)):
+    while i < len(matrix):
         j = 0
-        while (j < slack_variables):
+        while j < slack_variables:
             matrix[i].pop(number_variables + slack_variables + 1)
             j += 1
         i += 1

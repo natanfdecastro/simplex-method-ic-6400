@@ -1,18 +1,78 @@
 initial matrix 
 
-VB      x1      x2      x3      s1      s2      LD      
-U       3.0     4.0     5.0     -0.0    -0.0    -0.0    
-s1      6.0     7.0     8.0     1.0     0.0     7.0     
-s2      8.0     9.0     9.0     0.0     1.0     9.0     
+VB      x1      x2      s1      s2      r1      r2      LD      
+U       -8.0    -10.0   1.0     1.0     -0.0    -0.0    -15.0   
+r1      3.0     4.0     -1.0    0.0     1.0     0.0     7.0     
+r2      5.0     6.0     0.0     -1.0    0.0     1.0     8.0     
+
+Iteration 1
+Basic variable in: x2
+Basic variable out: r2
+Pivot: 6.0
+
+VB      x1      x2      s1      s2      r1      r2      LD      
+U       0.33    0.0     1.0     -0.67   0.0     1.67    -1.67   
+r1      -0.33   0.0     -1.0    0.67    1.0     -0.67   1.67    
+x2      0.8333  1.0     0.0     -0.166  0.0     0.1666  1.3333  
+
+
+Iteration 2
+Basic variable in: s2
+Basic variable out: r1
+Pivot: 0.67
+
+VB      x1      x2      s1      s2      r1      r2      LD      
+U       0.0     0.0     0.0     0.0     1.0     1.0     0.0     
+s2      -0.492  0.0     -1.492  1.0     1.4925  -1.0    2.4925  
+x2      0.75    1.0     -0.25   0.0     0.25    0.0     1.75    
+
 
 Multiple Solution
 
 Value of variables: 
 U = -0.0
-s1 = 7.0
-s2 = 9.0
+r1 = 0
+r2 = 0
+s1 = 0
+s2 = 2.4925373134328357
 x1 = 0
-x2 = 0
-x3 = 0
+x2 = 1.75
+The optimal solution for U is: 
+U = -0.0
+VB      x1      x2      s1      s2      LD      
+U       -0.5    -0.0    0.5     -0.0    -3.5    
+s2      -0.492  0.0     -1.492  1.0     2.4925  
+x2      0.75    1.0     -0.25   0.0     1.75    
 
-The optimal value is: 
+Iteration 1
+Basic variable in: x1
+Basic variable out: x2
+Pivot: 0.75
+
+VB      x1      x2      s1      s2      LD      
+U       0.0     0.67    0.33    0.0     -2.33   
+s2      0.0     0.66    -1.66   1.0     3.64    
+x1      1.0     1.3333  -0.333  0.0     2.3333  
+
+
+Multiple Solution
+
+Value of variables: 
+U = 2.33
+s1 = 0
+s2 = 3.64
+x1 = 2.333333333333333
+x2 = 0
+The optimal solution for U is: 
+U = 2.33
+
+Multiple Solution
+
+Value of variables: 
+U = 2.33
+s1 = 0
+s2 = 3.64
+x1 = 2.333333333333333
+x2 = 0
+The optimal solution for U is: 
+U = 2.33
