@@ -50,7 +50,9 @@ file = ''
     This function clean all de global variables 
 '''
 def clear():
-    global operation_to_use,txt_generation,objective_function,restriction_matrix,restriction_signs,slack_variables,artificial_variables,number_variables,matrix,file
+    global operation_to_use,txt_generation,objective_function,restriction_matrix,restriction_signs,slack_variables,artificial_variables,number_variables,matrix,file,extra_solutions,flagDeg
+    extra_solutions = False
+    flagDeg = False
     operation_to_use = ''
     txt_generation = ''
     objective_function = ''
@@ -77,8 +79,8 @@ def two_phases_method(max_min_operation_to_use, txt_generation_is_checked, objec
     file = open(txt_answer_file, 'w')
 
     create_initial_matrix()
+
     first_phase()
-    #print(matrix_to_string())
     simplex_method(1)
     file.close()
 
@@ -106,14 +108,16 @@ def first_phase():
                     sum_row(j)
     for i in range(1,len(matrix[1])):
         matrix[1][i] *= -1
-    file.write("primera matrix")
-    file.write(matrix_to_string())
+    if txt_generation:
+        file.write("primera matrix \n")
+        file.write(matrix_to_string())
     simplex_method(1)
     if matrix[1][-1] == 0:
         second_phase()
 
     else:
-        file.write("No es posible solucionar este problema.")
+        if txt_generation:
+            file.write("No es posible solucionar este problema.")
 
 
 '''
@@ -171,6 +175,7 @@ def set_variables():
     This function creates the initial matrix to perform the two phases method
 '''
 def create_initial_matrix():
+    global  matrix
     set_empty_matrix()
     matrix[1][0] = "U"
     create_new_objetive_function()
@@ -286,21 +291,24 @@ def simplex_method(iteration):
         restriction = determine_restriction(mnv[2], iteration)
         # When there is no elegible restriction, means that there is no solution with simplex
         if restriction[0] == None:
-            file.write("El problema no está acotado" + "\n")
-            file.write(str(mnv[0]) + " puede crecer tanto como quiera" + "\n")
+            if txt_generation:
+                file.write("El problema no está acotado" + "\n")
+                file.write(str(mnv[0]) + " puede crecer tanto como quiera" + "\n")
         else:
             # Prints the current iteration and graphs the current state of the matrix
-            file.write("" + "\n")
-            file.write("Iteración " + str(iteration) + "\n")
-            file.write("Variable básica que entra: " + mnv[0] + "\n")
-            file.write("Variable básica que sale: " + restriction[0] + "\n")
-            file.write("Pivote: " + str(matrix[restriction[2]][mnv[2]]) + "\n")
+            if txt_generation:
+                file.write("" + "\n")
+                file.write("Iteración " + str(iteration) + "\n")
+                file.write("Variable básica que entra: " + mnv[0] + "\n")
+                file.write("Variable básica que sale: " + restriction[0] + "\n")
+                file.write("Pivote: " + str(matrix[restriction[2]][mnv[2]]) + "\n")
 
             matrix[restriction[2]][0] = mnv[0]
             row_operations(mnv[2], restriction[2])
 
-            file.write("" + "\n")
-            file.write(matrix_to_string() + "\n")
+            if txt_generation:
+                file.write("" + "\n")
+                file.write(matrix_to_string() + "\n")
 
             return simplex_method(iteration + 1)
 
@@ -357,13 +365,11 @@ def determine_restriction(mnv, iteration):
 This function is used to apply the necesary operations on the matrix for the current iteration.
 '''
 def row_operations(mnv, restriction):
-    file.write("Operaciones fila realizadas:" + "\n")
     row_amount = len(matrix)
     column_amount = len(matrix[0])
     # Calculates the inverse multiplicative of the mnv value in the choosen restriction in order to multiply them and make sure the result is 1
     inverse_multiplicative = 1 / matrix[restriction][mnv]
     j = 1
-    file.write("f" + str(restriction - 1) + " * " + str(inverse_multiplicative) + " -> f" + str(restriction - 1) + "\n")
 
     # Multiplies the choosen restriction row by the inverse multiplicative
     while j < column_amount:
@@ -378,9 +384,7 @@ def row_operations(mnv, restriction):
         if i != restriction:
             j = 1
             multiplier = - matrix[i][mnv]
-            if multiplier != 0:
-                file.write(
-                    str(multiplier) + "f" + str(restriction - 1) + " + f" + str(i - 1) + " -> f" + str(i - 1) + "\n")
+
             while j < column_amount:
                 matrix[i][j] = round(matrix[restriction][j] * multiplier + matrix[i][j], 2)
                 j = j + 1
@@ -395,16 +399,20 @@ and does some simple final changes.
 def print_solution():
     global file
     if flagDeg:
-        file.write("" + "\n")
-        file.write("Solución Degenerada" + "\n")
+        if txt_generation:
+            file.write("" + "\n")
+            file.write("Solución Degenerada" + "\n")
     if extra_solutions:
-        file.write("" + "\n")
-        file.write("Solución Multiple" + "\n")
+        if txt_generation:
+            file.write("" + "\n")
+            file.write("Solución Multiple" + "\n")
     if not extra_solutions and not flagDeg:
+        if txt_generation:
+            file.write("" + "\n")
+            file.write("Solución" + "\n")
+    if txt_generation:
         file.write("" + "\n")
-        file.write("Solución" + "\n")
-    file.write("" + "\n")
-    file.write("Valor de las variables:" + "\n")
+        file.write("Valor de las variables:" + "\n")
     answer = {}
     # Finds every variable
     for column in matrix[0]:
@@ -422,8 +430,10 @@ def print_solution():
     for variable in sorted(answer.keys()):
         file.write(variable + " = " + str(answer[variable]) + "\n")
     # Prints the optimal value of z
-    file.write("Por lo tanto el valor óptimo de U es: " + "\n")
-    file.write("U = " + str(answer["U"]) + "\n")
+
+    if txt_generation:
+        file.write("Por lo tanto el valor óptimo de U es: " + "\n")
+        file.write("U = " + str(answer["U"]) + "\n")
 
 
 def second_phase():
@@ -454,5 +464,7 @@ def second_phase():
         matrix[1][j]*=-1
         j+=1
     #print(matrix_to_string())
-    file.write(matrix_to_string())
+    if txt_generation:
+        file.write(matrix_to_string())
+
     simplex_method(1)
